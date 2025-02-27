@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:PizzaProject_MAUI"
+             xmlns:views="clr-namespace:PizzaProject_MAUI.Views"
+             xmlns:models="clr-namespace:PizzaProject_MAUI.Models"
+             x:Class="PizzaProject_MAUI.Views.OrderPage"
+             x:DataType="local:OrderViewModel"
+             Title="{Binding PageTitle}">
+
+    <!--CONTENUTI DELLA MASCHERA: 
+            - seleziona base della pizza - REQUIRED
+            - seleziona ingredienti
+            - indica eventuali preferenze personali 
+            - indica numero
+            - salva ordine (visualizzabile nella pagina di lista)poco pomoo
+        -->
+
+    <ScrollView>
+        <VerticalStackLayout Margin="20, 5"
+                             Spacing="20">
+            
+            <!--base-->
+            <VerticalStackLayout>
+                <Label Text="Seleziona la base della tua pizza: "
+                       FontAttributes="Bold"
+                       />
+                <CollectionView ItemsSource="{Binding AvailableBases}"
+                                >
+                    <CollectionView.ItemTemplate >
+                        <DataTemplate x:DataType="models:ItemModel">
+                            <RadioButton Content="{Binding Value}"
+                                         IsChecked="{Binding IsSelected}"
+                                         />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <!--ingredienti-->
+            <VerticalStackLayout>
+                <Label Text="Seleziona i tuoi ingredienti: "
+                       FontAttributes="Bold"
+                       />
+                <CollectionView ItemsSource="{Binding AvailableToppings}">
+                    <CollectionView.ItemTemplate >
+                        <DataTemplate x:DataType="models:ItemModel">
+                            <HorizontalStackLayout>
+                                <CheckBox x:Name="checkbox"
+                                          IsChecked="{Binding IsSelected}"
+                                          Color="{AppThemeBinding Default={StaticResource CustomOrange}}"
+                                          />
+                                <Label Text="{Binding Value}"
+                                       VerticalOptions="Center"
+                                       />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <!--preferenze-->
+            <VerticalStackLayout>
+                <Label Text="Indica eventuali preferenze: "
+                       FontAttributes="Bold"
+                       />
+                <Entry Placeholder="Scrivi qui" 
+                       PlaceholderColor="{StaticResource Gray500}"
+                       ReturnType="Send"
+                       Completed="OnNotesEntryCompleted"
+                       />
+            </VerticalStackLayout>
+
+            <!--quantità-->
+            <HorizontalStackLayout>
+                <Label Text="Indica la quantità: "
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       />
+                <Entry Keyboard="Numeric"
+                       ReturnType="Send"
+                       Completed="OnQuantityIndicated"
+                       />
+            </HorizontalStackLayout>
+
+            <!--salvataggio ordine ed eventuale messaggio di errore-->
+            <Label Text="{Binding Error}"
+                   IsVisible="{Binding HasError}"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Default={StaticResource CustomDarkRed}}"
+                   HorizontalOptions="Center"
+                   Padding="10"
+                   />
+            <Button Text="SALVA"
+                    FontAttributes="Bold"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type views:OrderPage}}, Path=SaveOrderCommand}"
+                    />
+
+        </VerticalStackLayout>
+    </ScrollView>
+    
+</ContentPage>

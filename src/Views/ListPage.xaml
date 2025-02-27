@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons"
+             xmlns:local="clr-namespace:PizzaProject_MAUI"
+             xmlns:views="clr-namespace:PizzaProject_MAUI.Views"
+             xmlns:models="clr-namespace:PizzaProject_MAUI.Models"
+             x:Class="PizzaProject_MAUI.Views.ListPage"
+             x:DataType="local:ListViewModel"
+             Title="Le tue pizze">
+
+    <!--CONTENUTI DELLA MASCHERA: 
+        - bottone per aggiungere pizze all'ordine (apertura della pagina order)
+        - elenco delle pizze ordinate 
+    -->
+    
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" 
+                                        Command="{Binding AppearingCommand}" />
+    </ContentPage.Behaviors>
+
+    <VerticalStackLayout Margin="20, 5" >
+
+        <Button Text="AGGIUNGI PIZZA"
+                ImageSource="{mi:FontAwesomeSolid Icon=Plus, IconColor={AppThemeBinding Default={StaticResource White}}}"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type views:ListPage}}, Path=NewOrderCommand}"
+                Padding="7"
+                Margin="20, 10, 20, 20"
+                />
+
+        <!--Elenco ordini pizze-->
+        <CollectionView ItemsSource="{Binding OrdersList}"
+                        EmptyView="Non hai ancora ordinato alcuna pizza, apri l'altra pagina per aggiungere al tuo ordine!"
+                        >
+            <CollectionView.EmptyViewTemplate>
+                <DataTemplate>
+                    <Label Text="Non hai ancora ordinato alcuna pizza, apri l'altra pagina per aggiungere al tuo ordine!" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Default={StaticResource CustomOrange}}"
+                           />
+                </DataTemplate>
+            </CollectionView.EmptyViewTemplate>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:PizzaOrderModel">
+                    <VerticalStackLayout Margin="10"
+                                         Spacing="10"
+                                         >
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type views:ListPage}}, Path=OpenOrderCommand}"
+                                                  CommandParameter="{Binding Id}" 
+                                                  />
+                        </VerticalStackLayout.GestureRecognizers>
+                        <HorizontalStackLayout>
+                            <Label Text="Ordine n."
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Default={StaticResource CustomDarkRed}}"
+                                   />
+                            <Label Text="{Binding Id}"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Default={StaticResource CustomDarkRed}}"
+                                   />
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnSpacing="5"
+                              >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="30" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Margin="5, 0, 0, 0"
+                                                 >
+                                <HorizontalStackLayout>
+                                    <Label Text="base: " />
+                                    <Label Text="{Binding Base}" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout>
+                                    <Label Text="condimenti: "
+                                           IsVisible="{Binding ToppingsAreSet}"
+                                           />
+                                    <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Toppings}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <HorizontalStackLayout>
+                                                    <Label Text="{Binding}" />
+                                                    <Label Text=" "/>
+                                                </HorizontalStackLayout>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </HorizontalStackLayout>
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout>
+                                    <Label Text="note: "
+                                           IsVisible="{Binding NotesAreSet}"
+                                           VerticalOptions="Center"
+                                           />
+                                    <Label Text="{Binding Notes}"
+                                           Margin="0, 5, 0, 0"
+                                           VerticalOptions="Center"
+                                           />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="1" 
+                                   Text="{Binding Quantity}" 
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Start"
+                                   />
+
+                            <Button Grid.Column="3"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:ListViewModel}}, Path=DeleteOrderCommand}" 
+                                    CommandParameter="{Binding Id}"
+                                    ImageSource="{mi:FontAwesomeSolid Icon=Xmark, IconColor=white}"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Start"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    BackgroundColor="{AppThemeBinding Default={StaticResource CustomOrange}}"
+                                    Padding="7"
+                                    />
+                            <!--NOTE: un altro modo per ottenere un bottone che abbia solo un'immagine (e niente testo) è utilizzare ImageButton-->
+                        </Grid>
+
+                        <BoxView BackgroundColor="{AppThemeBinding Default={StaticResource CustomDarkRed}}" 
+                                 WidthRequest="250" 
+                                 HeightRequest="1"
+                                 />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+        
+    </VerticalStackLayout>
+</ContentPage>
