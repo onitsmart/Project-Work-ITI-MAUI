@@ -85,9 +85,11 @@ namespace PizzaProject_MAUI.Infrastructure
             var savedOrders = GetOrders();
             savedOrders.RemoveAt(id - 1);
 
+            var count = 1;
             foreach (var order in savedOrders)
             {
-                order.Id = savedOrders.Count;
+                order.Id = count;
+                count++;
             }
 
             var serializedOrders = JsonSerializer.Serialize(savedOrders, _defaultJsonSerializerOptions);

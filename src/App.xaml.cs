@@ -8,6 +8,7 @@ namespace PizzaProject_MAUI
         {
             // INITIALIZE COMPONENT è il metodo che inizializza la pagina come descritta nel file XAML
             // e la rende accessibile ai file scritti in codice C#.
+            // Best practice: lasciare sempre questo metodo per primo.
 
             InitializeComponent();
 

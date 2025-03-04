@@ -65,6 +65,7 @@ namespace PizzaProject_MAUI
                 
                 var data = PreferencesUtilities.GetOrder(orderId.Value);
                 Notes = data.Notes;
+                Quantity = data.Quantity;
 
                 foreach (var topping in AvailableToppings)
                 {
