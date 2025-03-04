@@ -1,8 +1,16 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:PizzaProject_MAUI"
              x:Class="PizzaProject_MAUI.App">
+
+    <!--XAML PAGE: 
+        'xmlns' è una direttiva per dichiarare dei namespace in XML.
+        'xmlns' e 'xmlns:x' sono inseriti automaticamente alla creazione di una nuova pagina di MAUI e sono da considerarsi indicatori di versione.
+
+        Per accedere ad un namespace nel codice è sufficiente utilizzare il nome assegnatogli (eg: xmlns:x -> x).
+        Ad esempio, è stato assegnato l'attributo x:Class che richiede di inserire il nome .NET completo della classe che rappresenta la pagina ed è necessario in ogni file xaml che rappresenti una Page;
+    -->
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -11,4 +19,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+
+    <!--NOTE: questa configurazione delle risorse dell'app è necessaria per poter accedere dal resto del codice XAML alle proprietà definite nei file Styles.xaml e Colors.xaml-->
 </Application>

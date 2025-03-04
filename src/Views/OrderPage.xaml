@@ -9,19 +9,36 @@
              x:DataType="local:OrderViewModel"
              Title="{Binding PageTitle}">
 
-    <!--CONTENUTI DELLA MASCHERA: 
-            - seleziona base della pizza - REQUIRED
-            - seleziona ingredienti
+    <!--XAML PAGE: 
+        'xmlns' è una direttiva per dichiarare dei namespace in XML.
+        'xmlns' e 'xmlns:x' sono inseriti automaticamente alla creazione di una nuova pagina di MAUI e sono da considerarsi indicatori di versione.
+
+        Il link in 'xmlns:toolkit' è fornito dalla documentazione del pacchetto di dipendenze.
+    
+        I riferimenti a spazi di nomi interni al progetto sono 'xmlns:local', 'xmlns:views' e 'xmlns:models'. 
+        Sono importanti perché permettono di accedere rispettivamente ai viewmodel, alle views e ai model.
+    
+        Per accedere ad un namespace nel codice è sufficiente utilizzare il nome assegnatogli (eg: xmlns:toolkit -> toolkit).
+        Ad esempio, sono stati assegnati i valori di due attributi: 
+            - x:Class richiede di inserire il nome .NET completo della classe che rappresenta la pagina ed è necessario in ogni file xaml che rappresenti una Page;
+            - x:DataType permette di specificare il modello (BindingContext) principale della Page. 
+    
+        Se nel file .xaml.cs della view è stato specificato un viewmodel sulla proprietà BindingContext, questo deve essere dichiarato all'interno di x:DataType (altrimenti il Binding non risulta completo).     
+    -->
+
+    <!--CONTENUTI DELLA PAGINA: 
+            - seleziona condimento base della pizza
+            - seleziona lista di ingredienti
             - indica eventuali preferenze personali 
-            - indica numero
-            - salva ordine (visualizzabile nella pagina di lista)poco pomoo
+            - indica numero di pizze così specificate da ordinare
+            - salva ordine (al click si torna alla pagina ListPage che conterrà la lista di ordini aggiornata)
         -->
 
     <ScrollView>
         <VerticalStackLayout Margin="20, 5"
                              Spacing="20">
             
-            <!--base-->
+            <!--Selezione del condimento base-->
             <VerticalStackLayout>
                 <Label Text="Seleziona la base della tua pizza: "
                        FontAttributes="Bold"
@@ -29,28 +46,34 @@
                 <CollectionView ItemsSource="{Binding AvailableBases}"
                                 >
                     <CollectionView.ItemTemplate >
-                        <DataTemplate x:DataType="models:ItemModel">
+                        <DataTemplate x:DataType="models:ItemModel"
+                                      >
+                            <!--NOTE: è stato specificato il DataType del DataTemplate per permettere l'accesso alle proprietà della classe.-->
                             <RadioButton Content="{Binding Value}"
                                          IsChecked="{Binding IsSelected}"
                                          />
+                            <!--NOTE: essendo 'AvailableBases' una ObservableCollection al cambiamento del valore delle proprietà queste vengono aggiornate automaticamente senza bisogno di ulteriori interventi.-->
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
 
-            <!--ingredienti-->
+            <!--Selezione della lista di ingredienti-->
             <VerticalStackLayout>
                 <Label Text="Seleziona i tuoi ingredienti: "
                        FontAttributes="Bold"
                        />
                 <CollectionView ItemsSource="{Binding AvailableToppings}">
                     <CollectionView.ItemTemplate >
-                        <DataTemplate x:DataType="models:ItemModel">
+                        <DataTemplate x:DataType="models:ItemModel"
+                                      >
+                            <!--NOTE: è stato specificato il DataType del DataTemplate per permettere l'accesso alle proprietà della classe.-->
                             <HorizontalStackLayout>
-                                <CheckBox x:Name="checkbox"
-                                          IsChecked="{Binding IsSelected}"
-                                          Color="{AppThemeBinding Default={StaticResource CustomOrange}}"
+                                <CheckBox IsChecked="{Binding IsSelected}"
+                                          Color="{StaticResource CustomOrange}"
                                           />
+                                <!--NOTE: 'AvailableToppings' è una ObservableCollection, quindi anche in questo caso le proprietà si aggiornano automaticamente.-->
+                                <!--NOTE: il colore 'CustomOrange' è definito all'interno del file Colors.xaml (cartella Resources).-->
                                 <Label Text="{Binding Value}"
                                        VerticalOptions="Center"
                                        />
@@ -60,19 +83,21 @@
                 </CollectionView>
             </VerticalStackLayout>
 
-            <!--preferenze-->
+            <!--Inserimento di eventuali preferenze e/o note-->
             <VerticalStackLayout>
                 <Label Text="Indica eventuali preferenze: "
-                       FontAttributes="Bold"
+                       FontAttributes="Bold" 
                        />
                 <Entry Placeholder="Scrivi qui" 
                        PlaceholderColor="{StaticResource Gray500}"
                        ReturnType="Send"
-                       Completed="OnNotesEntryCompleted"
+                       Completed="OnNotesEntryCompleted" 
                        />
+                <!--NOTE: 'OnNotesEntryCompleted' è un gestore di eventi ed è definito all'interno del file .xaml.cs come richiesto da MAUI, quindi è sufficiente utilizzare il suo nome come riferimento.-->
+                <!--NOTE: anche il colore 'Gray500' è definito all'interno del file Colors.xaml (cartella Resources).-->
             </VerticalStackLayout>
 
-            <!--quantità-->
+            <!--Inserimento della quantità di pizze da ordinare-->
             <HorizontalStackLayout>
                 <Label Text="Indica la quantità: "
                        FontAttributes="Bold"
@@ -82,20 +107,24 @@
                        ReturnType="Send"
                        Completed="OnQuantityIndicated"
                        />
+                <!--NOTE: Keyboard="Numeric" indica la richiesta di mostrare una tastiera di tipo numerico al click sul campo di inserimento della Entry.-->
+                <!--NOTE: anche 'OnQuantityIndicated' è un gestore di eventi a cui è sufficiente riferirsi con il nome.-->
             </HorizontalStackLayout>
 
-            <!--salvataggio ordine ed eventuale messaggio di errore-->
+            <!--Salvataggio dell'ordine ed eventuale messaggio di errore (in mancanza di un condimento base selezionato)-->
             <Label Text="{Binding Error}"
                    IsVisible="{Binding HasError}"
                    FontAttributes="Bold"
-                   TextColor="{AppThemeBinding Default={StaticResource CustomDarkRed}}"
+                   TextColor="{StaticResource CustomDarkRed}"
                    HorizontalOptions="Center"
                    Padding="10"
                    />
+            <!--NOTE: anche il colore 'CustomDarkRed' è definito all'interno del file Colors.xaml (cartella Resources).-->
             <Button Text="SALVA"
                     FontAttributes="Bold"
                     Command="{Binding Source={RelativeSource AncestorType={x:Type views:OrderPage}}, Path=SaveOrderCommand}"
                     />
+            <!--NOTE: il comando 'SaveOrderCommand' è definito nel file .xaml.cs, per cui è parte del namespace della view (non del viewmodel).-->
 
         </VerticalStackLayout>
     </ScrollView>

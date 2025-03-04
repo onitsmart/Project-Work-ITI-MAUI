@@ -11,9 +11,22 @@ namespace PizzaProject_MAUI
 
         public string Notes { get; set; } = string.Empty;
 
+        // OBSERVABLE COLLECTION è un tipo di elenco che permette di avere la view aggiornata automaticamente al cambiamento dei dati.
+        // Ricorda che questo tipo di collection deve sempre essere dichiarata 'public'.
+
         public ObservableCollection<ItemModel> AvailableBases { get; set; } = [];
 
         public ObservableCollection<ItemModel> AvailableToppings { get; set; } = [];
+
+        // L'attributo OBSERVABLE PROPERTY serve per aggiornare automaticamente la view al cambiamento del valore del campo. 
+        // Al suo utlizzo, viene creata una proprietà dello stesso tipo con il nome così generato:
+        //    - viene rimosso un eventuale '_' iniziale;
+        //    - la prima lettera diventa maiuscola.
+        // Inoltre, la proprietà sarà dichiarata come 'public'. Per evitare errori di funzionamento, dichiarare 'private' il campo al quale è associato l'attributo.
+        // La nuova proprietà sarà sempre quella da referenziare in tutto il codice (sia in xaml che in c#, compreso il resto del file in cui è stata dichiarata).
+        // Per esempio:
+        //    - dichiaro il campo _myString = "Hello" come ObservableProperty -> viene creata la proprietà MyString = "Hello";
+        //    - per referenziarla, utilizzo sempre il nome 'MyString'.
 
         [ObservableProperty]
         private string _pageTitle = "Nuovo ordine";

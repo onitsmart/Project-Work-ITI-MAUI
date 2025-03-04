@@ -10,6 +10,10 @@ namespace PizzaProject_MAUI.Infrastructure
             PropertyNameCaseInsensitive = true,
         };
 
+        /// <summary>
+        /// Accede alle Preferences per recuperare la lista degli pizze ordinate.
+        /// </summary>
+        /// <returns>La lista delle pizze ordinate.</returns>
         public static List<PizzaOrderModel> GetOrders()
         {
             var serializedSavedOrders = Preferences.Default.Get("orders", "");
@@ -20,6 +24,11 @@ namespace PizzaProject_MAUI.Infrastructure
             return savedOrders ?? [];
         }
 
+        /// <summary>
+        /// Accede alle Preferences e recupera i dettagli dell'ordine indicato.
+        /// </summary>
+        /// <param name="id">Il numero identificatore dell'ordine.</param>
+        /// <returns>I dettagli dell'ordine sotto forma di un'istanza di <see cref="PizzaOrderModel"/>.</returns>
         public static PizzaOrderModel GetOrder(int id)
         {
             var savedOrders = GetOrders();
@@ -28,6 +37,16 @@ namespace PizzaProject_MAUI.Infrastructure
             return order;
         }
 
+        /// <summary>
+        /// Salva un nuovo ordine nelle Preferences oppure ne modifica uno già esistente. 
+        /// Nel primo caso è necessario passare la base della pizza ed eventualmente la lista di ingredienti, le annotazioni e la quantità.
+        /// Nel secondo caso invece è richiesto inserire l'id dell'ordine. 
+        /// </summary>
+        /// <param name="id">Il numero identificatore dell'ordine da modificare.</param>
+        /// <param name="pizzaBase">Il condimento base della pizza del nuovo ordine.</param>
+        /// <param name="toppings">La lista di ingredienti del nuovo ordine.</param>
+        /// <param name="notes">Le annotazioni del nuovo ordine.</param>
+        /// <param name="quantity">La quantità di pizze del nuovo ordine.</param>
         public static void SaveOrUpdateOrder(int? id, string pizzaBase, IEnumerable<string> toppings, string notes, int quantity)
         {
             var savedOrders = GetOrders();
@@ -57,6 +76,10 @@ namespace PizzaProject_MAUI.Infrastructure
             Preferences.Default.Set("orders", serializedOrders);
         }
 
+        /// <summary>
+        /// Rimuove l'ordine indicato dalla lista delle pizze ordinate salvata nelle Preferences.
+        /// </summary>
+        /// <param name="id">Il numero identificatore dell'ordine da rimuovere.</param>
         public static void DeleteOrder(int id)
         {
             var savedOrders = GetOrders();
