@@ -2,7 +2,7 @@
 Progetto di programmazione di un'applicazione mobile con l'utilizzo di .NET MAUI (architettura MVVM).
 
 ## Presentazione 
-All'interno del repository è presente una [presentazione](Presentazione-ITI-MAUI.pptx) che spiega le tecnologie utilizzate e fa una breve introduzione al mondo di .NET MAUI. 
+All'interno del repository è presente una [presentazione](Presentazione-ITI-MAUI.pdf) che spiega le tecnologie utilizzate e fa una breve introduzione al mondo di .NET MAUI. 
 
 ## Descrizione dell'app
 L'applicazione permette di ordinare diverse pizze e visualizzare il proprio ordine attraverso due pagine. 
